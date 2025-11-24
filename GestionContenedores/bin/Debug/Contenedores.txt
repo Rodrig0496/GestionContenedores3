@@ -1,0 +1,5 @@
+1;Contenedor 1;Av. la Cultura;-18,034652;-70,256448;Lleno
+2;Contenedor 2;Parque Villa la Agronomica;-18,033659;-70,254148;Util
+3;Contenedor 3;Asoc. la Agronomica;-18,03477;-70,25499;Util
+4;Contenedor 4;Asoc. la Agronomica;-18,033819;-70,252796;Util
+5;Contenedor 5;Calle Los Paltos;-18,0361164503333;-70,2548217773438;Util
