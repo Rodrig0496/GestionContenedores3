@@ -19,6 +19,7 @@ namespace GestionContenedores
             InitializeComponent();
             _nivelPermisoUsuarioActual = nivelPermiso;
             _nombreUsuarioActual = nombreUsuario;
+            MostrarDashboard();
         }
         private void AbrirFormularioHijo(Control controlHijo) // Nota: cambié Form por Control para que sea más genérico
         {

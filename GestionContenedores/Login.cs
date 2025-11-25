@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GestionContenedores.Services;
+using System.Runtime.InteropServices;
 
 namespace GestionContenedores
 {
@@ -23,7 +24,17 @@ namespace GestionContenedores
         }
 
 
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
 
+        // Enlaza este evento al evento "MouseDown" del Formulario y del Panel Izquierdo
+        private void Login_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
         private void btnIngresar_Click(object sender, EventArgs e)
         {
             string usuario = txtUsuario.Text.Trim();
@@ -79,6 +90,11 @@ namespace GestionContenedores
         private void lblUsuario_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

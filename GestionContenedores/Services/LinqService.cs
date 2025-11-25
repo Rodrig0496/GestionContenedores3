@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace GestionContenedores.Services
         // 2. OBTENER TODOS
         public List<Contenedores> ObtenerContenedores()
         {
+            db.Refresh(RefreshMode.OverwriteCurrentValues, db.Contenedores);
             // Así de fácil se hace un SELECT * FROM
             return db.Contenedores.ToList();
         }

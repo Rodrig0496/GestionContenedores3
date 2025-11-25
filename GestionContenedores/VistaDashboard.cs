@@ -20,15 +20,34 @@ namespace GestionContenedores
         private int _nivelPermisoUsuario;
         private string _nombreUsuario;
         private Func<bool> _verificadorPermisosFn;
+        private Timer timerRefresco;
         public VistaDashboard(int nivelPermiso, string nombreUsuario, Func<bool> verificadorPermisosFn)
         {
             InitializeComponent();
             _service = new LinqService();
             _nivelPermisoUsuario = nivelPermiso;
             _nombreUsuario = nombreUsuario;
-
+            _verificadorPermisosFn = verificadorPermisosFn;
             ConfigurarControlesInicial();
             CargarDatosDashboard();
+            timerRefresco = new Timer();
+            timerRefresco.Interval = 2000;
+            timerRefresco.Tick += TimerRefresco_Tick;
+            timerRefresco.Start();
+        }
+        private void TimerRefresco_Tick(object sender, EventArgs e)
+        {
+            // Llamamos a tu método existente que ya carga el Mapa, Gráfico y Tabla
+            CargarDatosDashboard();
+        }
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            if (timerRefresco != null)
+            {
+                timerRefresco.Stop();
+                timerRefresco.Dispose();
+            }
+            base.OnHandleDestroyed(e);
         }
         private void ConfigurarControlesInicial()
         {
@@ -79,7 +98,7 @@ namespace GestionContenedores
             Series serie = new Series("Estados");
             serie.ChartType = SeriesChartType.Column; // Gráfico de barras verticales
             serie.IsValueShownAsLabel = true; // Mostrar el número sobre la barra
-
+            serie.IsVisibleInLegend = false;
             chartEstados.Series.Add(serie);
             chartEstados.ChartAreas[0].AxisX.Interval = 1; // Asegurar que se vean todas las etiquetas X
         }
@@ -107,15 +126,21 @@ namespace GestionContenedores
                 // Colorear según el estado (opcional, igual que en el mapa)
                 if (estadoLabel.Trim().Equals("Lleno", StringComparison.OrdinalIgnoreCase))
                 {
-                    punto.Color = Color.FromArgb(220, 53, 69); // Un rojo bootstrap
+                    punto.Color = Color.FromArgb(220, 53, 69); // Rojo
                 }
-                else if (estadoLabel.Trim().Equals("Util", StringComparison.OrdinalIgnoreCase))
+                else if (estadoLabel.Trim().Equals("Util", StringComparison.OrdinalIgnoreCase) ||
+                         estadoLabel.Trim().Equals("Vacio", StringComparison.OrdinalIgnoreCase))
                 {
-                    punto.Color = Color.FromArgb(40, 167, 69); // Un verde bootstrap
+                    punto.Color = Color.FromArgb(40, 167, 69); // Verde
+                }
+                // AGREGAMOS ESTO PARA EL AMARILLO
+                else if (estadoLabel.Trim().Equals("Mitad", StringComparison.OrdinalIgnoreCase))
+                {
+                    punto.Color = Color.FromArgb(255, 193, 7); // Amarillo (Tono "Warning" estándar)
                 }
                 else
                 {
-                    punto.Color = Color.SteelBlue; // Color por defecto
+                    punto.Color = Color.SteelBlue; // Por defecto
                 }
             }
             chartEstados.Update();

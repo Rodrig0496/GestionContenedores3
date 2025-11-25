@@ -78,17 +78,31 @@ namespace GestionContenedores
                 {
                     PointLatLng punto = new PointLatLng((double)item.Latitud, (double)item.Longitud);
 
-                    GMarkerGoogleType tipoPin = GMarkerGoogleType.green;
-                    if (item.Estado != null && item.Estado.Trim().Equals("Lleno", StringComparison.OrdinalIgnoreCase))
+                    // --- LÓGICA DE COLORES ACTUALIZADA ---
+                    GMarkerGoogleType tipoPin;
+                    string estadoNormalizado = item.Estado?.Trim().ToUpper(); // Convertir a mayúsculas para comparar
+
+                    switch (estadoNormalizado)
                     {
-                        tipoPin = GMarkerGoogleType.red;
+                        case "LLENO":
+                            tipoPin = GMarkerGoogleType.red; // Rojo
+                            break;
+                        case "MITAD":
+                            tipoPin = GMarkerGoogleType.yellow; // Amarillo
+                            break;
+                        case "UTIL":   // Casos para vacio
+                        case "VACIO":
+                            tipoPin = GMarkerGoogleType.green; // Verde
+                            break;
+                        default:
+                            tipoPin = GMarkerGoogleType.gray_small; // Gris para Error o desconocido
+                            break;
                     }
+                    // -------------------------------------
 
                     GMarkerGoogle marcador = new GMarkerGoogle(punto, tipoPin);
                     marcador.ToolTipText = $"{item.Nombre}\nEstado: {item.Estado}\n{item.Direccion}";
                     marcador.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-
-                    // GUARDAMOS EL ID EN EL TAG (Crucial)
                     marcador.Tag = item.Id;
 
                     marcadoresOverlay.Markers.Add(marcador);
@@ -116,35 +130,9 @@ namespace GestionContenedores
                     break;
                 }
             }
-
-            // 2. VERIFICAR PERMISOS (Lógica de UI solamente)
-            // Si es invitado (1), preguntamos si quiere loguearse.
-            if (_nivelPermisoUsuario == 1)
-            {
-                string accion = markerClickeado != null ? "gestionar contenedores" : "agregar contenedores";
-                DialogResult r = MessageBox.Show($"Para {accion} necesita ser Admin.\n¿Iniciar sesión?",
-                    "Permisos", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-                if (r == DialogResult.Yes)
-                {
-                    // Avisamos al padre que intente iniciar sesión
-                    LoginSolicitado?.Invoke(this, EventArgs.Empty);
-                    // El padre se encargará de mostrar el login y actualizar los permisos si tiene éxito.
-                    // Por ahora, salimos hasta que el usuario vuelva a intentar la acción ya logueado.
-                    return;
-                }
-                else
-                {
-                    return; // No quiso loguearse, no hacemos nada.
-                }
-            }
-
-            // Si llegamos aquí, es Admin (0) o ya se manejó el login.
-
-            // 3. ACCIONES SEGÚN DONDE CLICKEO
             if (markerClickeado != null)
             {
-                // --- CASO A: CLICK EN UN PIN (MOSTRAR MENU) ---
+                // ... (Tu lógica de Editar: menú contextual)
                 if (markerClickeado.Tag != null && markerClickeado.Tag is int id)
                 {
                     _idContenedorSeleccionadoTemporal = id;
@@ -153,17 +141,18 @@ namespace GestionContenedores
             }
             else
             {
-                // --- CASO B: CLICK EN EL SUELO (CREAR NUEVO) ---
+                // ... (Tu lógica de Nuevo Contenedor)
                 DialogResult respuesta = MessageBox.Show("¿Quiere ingresar un nuevo contenedor aquí?",
                     "Nuevo Contenedor", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta == DialogResult.Yes)
                 {
                     PointLatLng puntoClic = gMapControl1.FromLocalToLatLng(e.X, e.Y);
-                    // Disparamos el evento con las coordenadas
+                    // AQUÍ DISPARAMOS EL EVENTO HACIA EL DASHBOARD
                     NuevoContenedorSolicitado?.Invoke(this, puntoClic);
                 }
             }
+
         }
         private void gMapControl1_Load(object sender, EventArgs e)
         {
