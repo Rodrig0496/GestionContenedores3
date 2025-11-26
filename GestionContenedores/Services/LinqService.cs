@@ -29,9 +29,11 @@ namespace GestionContenedores.Services
         // 2. OBTENER TODOS
         public List<Contenedores> ObtenerContenedores()
         {
-            
-            // Así de fácil se hace un SELECT * FROM
-            return db.Contenedores.ToList();
+
+            using (var nuevaConexion = new DataClasses1DataContext())
+            {
+                return nuevaConexion.Contenedores.ToList();
+            }
         }
 
         // 3. GUARDAR
