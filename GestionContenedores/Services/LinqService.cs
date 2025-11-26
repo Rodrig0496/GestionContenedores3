@@ -23,13 +23,13 @@ namespace GestionContenedores.Services
             {
                 return usuarioEncontrado.NivelPermiso;
             }
-            return -1; // No encontrado
+            return -1; // No encontrado -
         }
 
         // 2. OBTENER TODOS
         public List<Contenedores> ObtenerContenedores()
         {
-            db.Refresh(RefreshMode.OverwriteCurrentValues, db.Contenedores);
+            
             // Así de fácil se hace un SELECT * FROM
             return db.Contenedores.ToList();
         }

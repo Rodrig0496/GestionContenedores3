@@ -12,7 +12,7 @@ namespace GestionContenedores.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -31,6 +31,40 @@ namespace GestionContenedores.Properties {
         public string contenedorDBConnectionString {
             get {
                 return ((string)(this["contenedorDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-O13P0GC;Initial Catalog=contenedorDB;Integrated Security=True" +
+            "")]
+        public string contenedorDBConnectionString1 {
+            get {
+                return ((string)(this["contenedorDBConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=basurerosinteligentes.database.windows.net;Initial Catalog=contenedor" +
+            "DB;User ID=adminBasureros;Password=Basura1234;")]
+        public string contenedorDBConnectionString2 {
+            get {
+                return ((string)(this["contenedorDBConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=basurerosinteligentes.database.windows.net;Initial Catalog=BasurerosI" +
+            "nteligentesDB;Persist Security Info=True;User ID=adminBasureros;Password=Basura1" +
+            "234")]
+        public string BasurerosInteligentesDBConnectionString {
+            get {
+                return ((string)(this["BasurerosInteligentesDBConnectionString"]));
             }
         }
     }
